@@ -40,29 +40,29 @@
 ### equals方法示例：
 
 >
-     ```java  
-     public class Employee{
-         ...
-         public boolean equals(Object otherObject) {
-             // a quick test to see if the objects are identical
-             if (this == otherObject) return true;
- 
-             // must return false if the explicit parameter is null
-             if (otherObject == null) return false;
- 
-             // if the classes don't match, they can't be equal
-             if (getClass() != otherObject.getClass()) return false;
- 
-             // now we know otherObject is a non-null Employee
-             Employee other = (Employee) otherObject;
- 
-             // test whether the fields have identical values
-             return Objects.equals(name, other.name)  
-                         && salary == other.salary  
-                         && Objects.equals(hireDay, other.hireDay);
-         }
-     }  
-     ```
+>     ```java  
+>     public class Employee{
+>         ...
+>         public boolean equals(Object otherObject) {
+>             // a quick test to see if the objects are identical
+>             if (this == otherObject) return true;
+> 
+>             // must return false if the explicit parameter is null
+>             if (otherObject == null) return false;
+> 
+>             // if the classes don't match, they can't be equal
+>             if (getClass() != otherObject.getClass()) return false;
+> 
+>             // now we know otherObject is a non-null Employee
+>             Employee other = (Employee) otherObject;
+> 
+>             // test whether the fields have identical values
+>             return Objects.equals(name, other.name)  
+>                         && salary == other.salary  
+>                         && Objects.equals(hireDay, other.hireDay);
+>         }
+>     }  
+>     ```
 >
 
 # 2. hashCode方法(CoreJava1-P170)：  
@@ -106,10 +106,6 @@
 为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。
 
 	```java
-	/**
-	 * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
-	 * 实际中一般不会按照name、gender、age来判定是否为同一个人。
-	 */
 	public class Person {
 	
 	  private boolean gender;
