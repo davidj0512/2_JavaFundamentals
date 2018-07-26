@@ -8,9 +8,8 @@
 > ##### 写完美equals方法的建议： `public boolean equals(Object otherObject)`
 >> * 显示参数命名为otherObject，稍后需要将它转换成另一个叫做other的对象
 >> * 检测this与otherObject是否引用同一个对象：
->>> 
-```java
+
         if(this == otherObject) return true;
-```
+
 
 >> 这条语句知识一个优化。实际上，这是一种经常采用的形式。因为计算这个等式要比一个一个地比较类中的域所付出的代价要小的多。
