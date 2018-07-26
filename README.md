@@ -175,7 +175,7 @@ jhgkjhgkjh
 
 为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。  
 
-	``` java
+``` java  
 	/**
 	 * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
 	 * 实际中一般不会按照name、gender、age来判定是否为同一个人。
@@ -212,7 +212,7 @@ jhgkjhgkjh
 		    return result;
 		}
 	}
-	```
+```
 
 Person类有三个关键域gender、age和name，而且分别属于不同的类型boolean、int和String。按照前面介绍的步骤很容易实现hashCode，经过测试，相等的实例都具有相等的散列码。
 
