@@ -35,7 +35,7 @@ return field1 == other.field1
 
 **注意：** 
 > 1, 为了防备有的域可能为null的情况（如field2可能为null），最好使用`Objects.equals(a, b)`方法，如果两个参数都为null，则返回true；如果其中一个为null，则返回false；若两个参数都不为null，则调用a.equals(b)。  
-> 2, 对于数组类型的域，可以使用静态的`Arrays.equals()`方法检测相应的数组元素是否相等。
+> 2, 对于数组类型的域，可以使用静态的`Arrays.equals()`方法检测相应的数组元素是否相等。  
 > 3, 如果在子类中重新定义equals，就要在其中包含对超类equals的调用`super.equals(other)`  
 
 ### equals方法示例：
@@ -81,7 +81,7 @@ public class Employee{
 理想情况下，散列函数应该把集合中不相等的实例均匀地分布到所有可能的散列值上。虽然很难做到，但下面的方案不失为一种良好的解决方法。
 
 > * 1- 把某个非零的常数值，比如17，保存在变量int result中
-
+>
 > * 2- 对于对象中每个关键域f（关键域指equals方法比较时用到的域），完成以下步骤：
 > 
 >> * a. 为该域计算int类型的散列码c：
