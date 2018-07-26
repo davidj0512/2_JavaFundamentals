@@ -27,11 +27,11 @@
 >
 > * 现在开始对所有需要比较的域进行比较。使用 == 比较基本类型域，使用equals比较对象域。如果所有的域都匹配，就返回true，否则放回false。  
 > 
-> ```java  
-> return field1 == other.field1  
->     && Objects.equals(field2, other.field2)  
->     && ...;  
-> ```  
+> 	```java  
+> 	return field1 == other.field1  
+>     	&& Objects.equals(field2, other.field2)  
+>     	&& ...;  
+> 	```  
 >
 > **注意：** 1, 为了防备有的域可能为null的情况（如field2可能为null），最好使用`Objects.equals(a, b)`方法，如果两个参数都为null，则返回true；如果其中一个为null，则返回false；若两个参数都不为null，则调用a.equals(b)。  
 > 2, 对于数组类型的域，可以使用静态的`Arrays.equals()`方法检测相应的数组元素是否相等。
@@ -39,31 +39,29 @@
 
 ### equals方法示例：
 
->
->     ```java  
->     public class Employee{
->         ...
->         public boolean equals(Object otherObject) {
->             // a quick test to see if the objects are identical
->             if (this == otherObject) return true;
+> 	```java  
+> 	public class Employee{
+>     	...
+>     	public boolean equals(Object otherObject) {
+>         	// a quick test to see if the objects are identical
+>         	if (this == otherObject) return true;
 > 
->             // must return false if the explicit parameter is null
->             if (otherObject == null) return false;
+>         	// must return false if the explicit parameter is null
+>         	if (otherObject == null) return false;
 > 
->             // if the classes don't match, they can't be equal
->             if (getClass() != otherObject.getClass()) return false;
+>         	// if the classes don't match, they can't be equal
+>         	if (getClass() != otherObject.getClass()) return false;
 > 
->             // now we know otherObject is a non-null Employee
->             Employee other = (Employee) otherObject;
+>         	// now we know otherObject is a non-null Employee
+>         	Employee other = (Employee) otherObject;
 > 
->             // test whether the fields have identical values
->             return Objects.equals(name, other.name)  
->                         && salary == other.salary  
->                         && Objects.equals(hireDay, other.hireDay);
->         }
->     }  
->     ```
->
+>         	// test whether the fields have identical values
+>         	return Objects.equals(name, other.name)  
+>                     	&& salary == other.salary  
+>                     	&& Objects.equals(hireDay, other.hireDay);
+>     	}
+> 	}  
+> 	```
 
 # 2. hashCode方法(CoreJava1-P170)：  
 
@@ -105,44 +103,44 @@
 
 为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。
 
-```java
-/**
- * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
- * 实际中一般不会按照name、gender、age来判定是否为同一个人。
- */
-public class Person {
-
-  private boolean gender;
-  private int age;
-  private String name;
-
-  public Person(boolean gender, int age, String name) {
-    this.gender = gender;
-    this.age = age;
-    this.name = name;
-  }
-    
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) return true;
-    if (!(obj instanceof Person)) return false;
-    Person p = (Person) obj;
-    return p.gender == gender && p.age == age && p.name == name;
-  }
-    
-  @Override
-  public int hashCode() {
-    int result = 17;
-    int c = gender ? 1 : 0;
-    result = 31 * result + c;
-    c = age;
-    result = 31 * result + c;
-    c = name.hashCode();
-    result = 31 * result + c;
-    return result;
-  }
-}
-```
+	```java
+	/**
+	 * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
+	 * 实际中一般不会按照name、gender、age来判定是否为同一个人。
+	 */
+	public class Person {
+	
+		private boolean gender;
+		private int age;
+		private String name;
+	
+		public Person(boolean gender, int age, String name) {
+			this.gender = gender;
+			this.age = age;
+			this.name = name;
+		}
+	    
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == this) return true;
+			if (!(obj instanceof Person)) return false;
+			Person p = (Person) obj;
+			return p.gender == gender && p.age == age && p.name == name;
+		}
+	    
+		@Override
+		public int hashCode() {
+		    int result = 17;
+		    int c = gender ? 1 : 0;
+		    result = 31 * result + c;
+		    c = age;
+		    result = 31 * result + c;
+		    c = name.hashCode();
+		    result = 31 * result + c;
+		    return result;
+		}
+	}
+	```
 
 Person类有三个关键域gender、age和name，而且分别属于不同的类型boolean、int和String。按照前面介绍的步骤很容易实现hashCode，经过测试，相等的实例都具有相等的散列码。
 
