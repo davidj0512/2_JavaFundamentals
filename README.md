@@ -101,7 +101,80 @@
 > * 4- 写完了hashCode方法后，问问自己“相等的实例是否都具有相等的散列码”。要编写单元测试来验证你的推断。如果相等的实例有着不同的散列码，则要找出原因，并修正错误。
 > 
 
-为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。
+``` java
+public class Person {
+	
+	private boolean gender;
+	private int age;
+	private String name;
+
+	public Person(boolean gender, int age, String name) {
+		this.gender = gender;
+		this.age = age;
+		this.name = name;
+	}
+    
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) return true;
+		if (!(obj instanceof Person)) return false;
+		Person p = (Person) obj;
+		return p.gender == gender && p.age == age && p.name == name;
+	}
+    
+	@Override
+	public int hashCode() {
+	    int result = 17;
+	    int c = gender ? 1 : 0;
+	    result = 31 * result + c;
+	    c = age;
+	    result = 31 * result + c;
+	    c = name.hashCode();
+	    result = 31 * result + c;
+	    return result;
+	}
+}
+```
+
+jhgkjhgkjh
+
+	``` java
+	public class Person {
+		
+		private boolean gender;
+		private int age;
+		private String name;
+	
+		public Person(boolean gender, int age, String name) {
+			this.gender = gender;
+			this.age = age;
+			this.name = name;
+		}
+	    
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == this) return true;
+			if (!(obj instanceof Person)) return false;
+			Person p = (Person) obj;
+			return p.gender == gender && p.age == age && p.name == name;
+		}
+	    
+		@Override
+		public int hashCode() {
+		    int result = 17;
+		    int c = gender ? 1 : 0;
+		    result = 31 * result + c;
+		    c = age;
+		    result = 31 * result + c;
+		    c = name.hashCode();
+		    result = 31 * result + c;
+		    return result;
+		}
+	}
+	```
+
+为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。  
+
 	``` java
 	/**
 	 * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
