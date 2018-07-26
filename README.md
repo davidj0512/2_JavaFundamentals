@@ -105,40 +105,44 @@
 
 为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。
 
-	```java
-	public class Person {
-	
-	  private boolean gender;
-	  private int age;
-	  private String name;
-	
-	  public Person(boolean gender, int age, String name) {
-	    this.gender = gender;
-	    this.age = age;
-	    this.name = name;
-	  }
-	    
-	  @Override
-	  public boolean equals(Object obj) {
-	    if (obj == this) return true;
-	    if (!(obj instanceof Person)) return false;
-	    Person p = (Person) obj;
-	    return p.gender == gender && p.age == age && p.name == name;
-	  }
-	    
-	  @Override
-	  public int hashCode() {
-	    int result = 17;
-	    int c = gender ? 1 : 0;
-	    result = 31 * result + c;
-	    c = age;
-	    result = 31 * result + c;
-	    c = name.hashCode();
-	    result = 31 * result + c;
-	    return result;
-	  }
-	}
-	```
+```java
+/**
+ * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
+ * 实际中一般不会按照name、gender、age来判定是否为同一个人。
+ */
+public class Person {
+
+  private boolean gender;
+  private int age;
+  private String name;
+
+  public Person(boolean gender, int age, String name) {
+    this.gender = gender;
+    this.age = age;
+    this.name = name;
+  }
+    
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) return true;
+    if (!(obj instanceof Person)) return false;
+    Person p = (Person) obj;
+    return p.gender == gender && p.age == age && p.name == name;
+  }
+    
+  @Override
+  public int hashCode() {
+    int result = 17;
+    int c = gender ? 1 : 0;
+    result = 31 * result + c;
+    c = age;
+    result = 31 * result + c;
+    c = name.hashCode();
+    result = 31 * result + c;
+    return result;
+  }
+}
+```
 
 Person类有三个关键域gender、age和name，而且分别属于不同的类型boolean、int和String。按照前面介绍的步骤很容易实现hashCode，经过测试，相等的实例都具有相等的散列码。
 
