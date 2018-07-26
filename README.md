@@ -1,67 +1,68 @@
 # 1. equals方法(CoreJava1-P166)：
 
 ### 注意点：
-> 
-> * Java语言规范要求equals方法具有这些特性： 自反性， 对称性， 传递性， 一致性， 以及对于任意非空引用x，x.equals(null)应该返回false
-> 
-> * equals方法其实是覆盖Object类的equals方法，方法签名为： `public boolean equals(Object obj)`, 注意参数只能是`Object`类型，因为父类Object类中的equals方法就是这样。 为了避免错误，要使用`@Override`对覆盖方法进行标记。
->
+ 
+* Java语言规范要求equals方法具有这些特性： 自反性， 对称性， 传递性， 一致性， 以及对于任意非空引用x，x.equals(null)应该返回false
+
+* equals方法其实是覆盖Object类的equals方法，方法签名为： `public boolean equals(Object obj)`, 注意参数只能是`Object`类型，因为父类Object类中的equals方法就是这样。 为了避免错误，要使用`@Override`对覆盖方法进行标记。
+
 ### 写完美equals方法的建议： `public boolean equals(Object otherObject)`
-> 
-> * 显示参数命名为otherObject，稍后需要将它转换成另一个叫做other的对象
->
-> * 检测this与otherObject是否引用同一个对象：  
-> `if(this == otherObject) return true;`。   
-> 这条语句只是一个优化。实际上，这是一种经常采用的形式。因为计算这个等式要比一个一个地比较类中的域所付出的代价要小的多。
->
-> * 检测otherObject是否为null，如果为null，返回false。这项检测是很必要的。  
-> `if(otherObject == null) return false;`
->
-> * 比较this与otherObject是否属于同一个类。  
-> 如果equals的语义在每个子类中有所改变，就使用getClass检测：`if (getClass != otherObject.getClass()) return false;`；   
-> 如果所有子类都拥有统一的语义，就使用instanceof检测：`if(!(otherObject instanceof ClassName)) return false;`    
-> (也可说为：如果子类能够拥有自己的相等概念（即判断相等要用到子类中特有的域），则对称性需求强制超类equals方法中采用getClass进行检测； 如果由超类决定相等的概念（即判断相等的域都在超类中），那么超类equals方法中就可以使用instanceof进行检测。这样才可以满足对称性的特性，才可以在不同的子类对象之间进行相等的比较。)
->
-> * 将otherObject转换为相应类的类型变量：  
-> `ClassName other = (ClassName)otherObject;`
->
-> * 现在开始对所有需要比较的域进行比较。使用 == 比较基本类型域，使用equals比较对象域。如果所有的域都匹配，就返回true，否则放回false。  
-> 
-> 	```java  
-> 	return field1 == other.field1  
->     	&& Objects.equals(field2, other.field2)  
->     	&& ...;  
-> 	```  
->
-> **注意：** 1, 为了防备有的域可能为null的情况（如field2可能为null），最好使用`Objects.equals(a, b)`方法，如果两个参数都为null，则返回true；如果其中一个为null，则返回false；若两个参数都不为null，则调用a.equals(b)。  
+
+* 显示参数命名为otherObject，稍后需要将它转换成另一个叫做other的对象
+
+* 检测this与otherObject是否引用同一个对象：  
+`if(this == otherObject) return true;`。   
+这条语句只是一个优化。实际上，这是一种经常采用的形式。因为计算这个等式要比一个一个地比较类中的域所付出的代价要小的多。
+
+* 检测otherObject是否为null，如果为null，返回false。这项检测是很必要的。  
+`if(otherObject == null) return false;`
+
+* 比较this与otherObject是否属于同一个类。  
+如果equals的语义在每个子类中有所改变，就使用getClass检测：`if (getClass != otherObject.getClass()) return false;`；   
+如果所有子类都拥有统一的语义，就使用instanceof检测：`if(!(otherObject instanceof ClassName)) return false;`    
+(也可说为：如果子类能够拥有自己的相等概念（即判断相等要用到子类中特有的域），则对称性需求强制超类equals方法中采用getClass进行检测； 如果由超类决定相等的概念（即判断相等的域都在超类中），那么超类equals方法中就可以使用instanceof进行检测。这样才可以满足对称性的特性，才可以在不同的子类对象之间进行相等的比较。)
+
+* 将otherObject转换为相应类的类型变量：  
+`ClassName other = (ClassName)otherObject;`
+
+* 现在开始对所有需要比较的域进行比较。使用 == 比较基本类型域，使用equals比较对象域。如果所有的域都匹配，就返回true，否则放回false。  
+
+```java  
+return field1 == other.field1  
+		&& Objects.equals(field2, other.field2)  
+		&& ...;  
+```  
+
+**注意：** 
+> 1, 为了防备有的域可能为null的情况（如field2可能为null），最好使用`Objects.equals(a, b)`方法，如果两个参数都为null，则返回true；如果其中一个为null，则返回false；若两个参数都不为null，则调用a.equals(b)。  
 > 2, 对于数组类型的域，可以使用静态的`Arrays.equals()`方法检测相应的数组元素是否相等。
 > 3, 如果在子类中重新定义equals，就要在其中包含对超类equals的调用`super.equals(other)`  
 
 ### equals方法示例：
 
-> 	```java  
-> 	public class Employee{
->     	...
->     	public boolean equals(Object otherObject) {
->         	// a quick test to see if the objects are identical
->         	if (this == otherObject) return true;
-> 
->         	// must return false if the explicit parameter is null
->         	if (otherObject == null) return false;
-> 
->         	// if the classes don't match, they can't be equal
->         	if (getClass() != otherObject.getClass()) return false;
-> 
->         	// now we know otherObject is a non-null Employee
->         	Employee other = (Employee) otherObject;
-> 
->         	// test whether the fields have identical values
->         	return Objects.equals(name, other.name)  
->                     	&& salary == other.salary  
->                     	&& Objects.equals(hireDay, other.hireDay);
->     	}
-> 	}  
-> 	```
+```java  
+public class Employee{
+	...
+	public boolean equals(Object otherObject) {
+		// a quick test to see if the objects are identical
+		if (this == otherObject) return true;
+ 
+		// must return false if the explicit parameter is null
+		if (otherObject == null) return false;
+
+		// if the classes don't match, they can't be equal
+		if (getClass() != otherObject.getClass()) return false;
+ 
+		// now we know otherObject is a non-null Employee
+		Employee other = (Employee) otherObject;
+
+		// test whether the fields have identical values
+		return Objects.equals(name, other.name)  
+						&& salary == other.salary  
+						&& Objects.equals(hireDay, other.hireDay);
+	}
+}  
+```
 
 # 2. hashCode方法(CoreJava1-P170)：  
 
@@ -99,11 +100,16 @@
 > * 3- 返回result
 > 
 > * 4- 写完了hashCode方法后，问问自己“相等的实例是否都具有相等的散列码”。要编写单元测试来验证你的推断。如果相等的实例有着不同的散列码，则要找出原因，并修正错误。
-> 
 
-``` java
+为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。  
+
+``` java  
+/**
+ * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
+ * 实际中一般不会按照name、gender、age来判定是否为同一个人。
+ */
 public class Person {
-	
+
 	private boolean gender;
 	private int age;
 	private String name;
@@ -134,84 +140,6 @@ public class Person {
 	    return result;
 	}
 }
-```
-
-jhgkjhgkjh
-
-	``` java
-	public class Person {
-		
-		private boolean gender;
-		private int age;
-		private String name;
-	
-		public Person(boolean gender, int age, String name) {
-			this.gender = gender;
-			this.age = age;
-			this.name = name;
-		}
-	    
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == this) return true;
-			if (!(obj instanceof Person)) return false;
-			Person p = (Person) obj;
-			return p.gender == gender && p.age == age && p.name == name;
-		}
-	    
-		@Override
-		public int hashCode() {
-		    int result = 17;
-		    int c = gender ? 1 : 0;
-		    result = 31 * result + c;
-		    c = age;
-		    result = 31 * result + c;
-		    c = name.hashCode();
-		    result = 31 * result + c;
-		    return result;
-		}
-	}
-	```
-
-为了更清晰的说明这几个步骤具体如何实现，我们举一个简单的例子。考虑如下Person类的hashCode实现。  
-
-``` java  
-	/**
-	 * Person并不是一个非常合适的例子，此处仅用于说明如何按照步骤编写hashCode方法。
-	 * 实际中一般不会按照name、gender、age来判定是否为同一个人。
-	 */
-	public class Person {
-	
-		private boolean gender;
-		private int age;
-		private String name;
-	
-		public Person(boolean gender, int age, String name) {
-			this.gender = gender;
-			this.age = age;
-			this.name = name;
-		}
-	    
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == this) return true;
-			if (!(obj instanceof Person)) return false;
-			Person p = (Person) obj;
-			return p.gender == gender && p.age == age && p.name == name;
-		}
-	    
-		@Override
-		public int hashCode() {
-		    int result = 17;
-		    int c = gender ? 1 : 0;
-		    result = 31 * result + c;
-		    c = age;
-		    result = 31 * result + c;
-		    c = name.hashCode();
-		    result = 31 * result + c;
-		    return result;
-		}
-	}
 ```
 
 Person类有三个关键域gender、age和name，而且分别属于不同的类型boolean、int和String。按照前面介绍的步骤很容易实现hashCode，经过测试，相等的实例都具有相等的散列码。
