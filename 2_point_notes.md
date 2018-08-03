@@ -70,11 +70,11 @@ Ref: [Java中的断言assert](https://www.cnblogs.com/zoraliu66/p/6537066.html)
 
 * java8中调用**Iterator.forEachRemaining**方法并提供一个lambda表达式就可以遍历并处理Collection中的每一个元素，都不用写循环了。(也可用List.forEach() or Map.forEach(), forEach是Iterable接口中的方法)
 > ```java
-	ArrayList<String> list = new ArrayList<>();
-	list.add("1st");
-	list.add("2nd");
-	list.add("3rd");
-	list.iterator().forEachRemaining(System.out::println);
+> 	ArrayList<String> list = new ArrayList<>();
+> 	list.add("1st");
+> 	list.add("2nd");
+> 	list.add("3rd");
+> 	list.iterator().forEachRemaining(System.out::println);
 > ```
 
 ### 4. Java8之方法引用
