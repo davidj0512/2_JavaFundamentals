@@ -68,7 +68,7 @@ Ref: [Java中的断言assert](https://www.cnblogs.com/zoraliu66/p/6537066.html)
 >int value = map["key"];     
 >```
 
-* java8中调用**forEachRemaining**方法并提供一个lambda表达式就可以遍历并处理Collection中的每一个元素，都不用写循环了。
+* java8中调用**Iterator.forEachRemaining**方法并提供一个lambda表达式就可以遍历并处理Collection中的每一个元素，都不用写循环了。(也可用List.forEach() or Map.forEach(), forEach是Iterable接口中的方法)
 > ```java
 	ArrayList<String> list = new ArrayList<>();
 	list.add("1st");
@@ -86,6 +86,8 @@ Ref: [Java中的断言assert](https://www.cnblogs.com/zoraliu66/p/6537066.html)
 注意方法引用是一个Lambda表达式，其中方法引用的操作符是双冒号"::"。
 
 Ref: [Java8之方法引用](https://www.cnblogs.com/xiaoxi/p/7099667.html)
+
+（我总结：可直接用作方法引用的方法，前提是它的函数签名要和函数式接口中的函数描述符一致，即参数列表和返回值同函数式接口的一致即可。）
 
 ### 5. 要尽可能使用Iterator接口中的remove方法而不是用Collection接口中的remove方法
 
@@ -130,8 +132,7 @@ for (int i = 0; i < list.size()；i++)
 
 ### 8. 散列表原理：
 
-在Java 中，散列表用链表数组实现。每个列表被称为桶（ bucket)。要想査找表中对象的位置， 就要先计算它的散列码， 然后与桶的总数取余，所得到的结果就是保存这个元素的桶的索引。例如， 如果某个对象的散列码为76268, 并且有128 个桶，对象应该保存在第108 号桶中（ 76268
-除以128 余108 )。或许会很幸运， 在这个桶中没有其他元素， 此时将元素直接插人到桶中就可以了。当然，有时候会遇到桶被占的情况，这也是不可避免的。这种现象被称为散列冲突（ hash collision)。这时，需要用新对象与桶中的所有对象进行比较， 査看这个对象是否已经存在。如果散列码是合理且随机分布的， 桶的数目也足够大， 需要比较的次数就会很少。
+在Java 中，散列表用链表数组实现。每个列表被称为桶（ bucket)。要想査找表中对象的位置， 就要先计算它的散列码， 然后与桶的总数取余，所得到的结果就是保存这个元素的桶的索引。例如， 如果某个对象的散列码为76268, 并且有128 个桶，对象应该保存在第108 号桶中（ 76268除以128 余108 )。或许会很幸运， 在这个桶中没有其他元素， 此时将元素直接插人到桶中就可以了。当然，有时候会遇到桶被占的情况，这也是不可避免的。这种现象被称为散列冲突（ hash collision)。这时，需要用新对象与桶中的所有对象进行比较， 査看这个对象是否已经存在。如果散列码是合理且随机分布的， 桶的数目也足够大， 需要比较的次数就会很少。
 （在JavaSE 8 中， 桶满时会从链表变为平衡二叉树。）
 如果想更多地控制散列表的运行性能， 就要指定一个初始的桶数。桶数是指用于收集具有相同散列值的桶的数目。如果要插入到散列表中的元素太多， 就会增加冲突的可能性， 降低运行性能。如果大致知道最终会有多少个元素要插人到散列表中， 就可以设置桶数。通常， 将桶数设置为预计元素个数的75% ~ 150%。有些研究人员认为：尽管还没有确凿的证据，** 但最好将桶数设置为一个素数，以防键的集聚**。**标准类库使用的桶数是2的幂， 默认值为16(为表大小提供的任何值都将被自动地转换为2 的下一个幂)**。
 当然，并不是总能够知道需要存储多少个元素的， 也有可能最初的估计过低。如果散列表太满， 就需要**再散列（rehashed)**。如果要对散列表再散列， 就需要创建一个桶数更多的表，并将所有元素插入到这个新表中，. 然后丢弃原来的表。**装填因子（load factor ) **决定何时对散列表进行再散列。例如， 如果装填因子为0.75 (默认值)，而表中超过75%的位置已经填入元素， 这个表就会用双倍的桶数自动地进行再散列。对于大多数应用程序来说， 装填因子为0.75 是比较合理的。
@@ -153,3 +154,36 @@ Ref: [Why is ArrayDeque better than LinkedList](https://stackoverflow.com/questi
 与TreeSet—样，一个优先级队列既可以保存实现了Comparable 接口的类对象， 也可以保存在构造器中提供的Comparator 对象。
 使用优先级队列的典型示例是任务调度。每一个任务有一个优先级， 任务以随机顺序添加到队列中。每当启动一个新的任务时，都将优先级最高的任务从队列中删除（由于习惯上将1 设为“ 最高” 优先级，所以会将最小的元素删除)。
 程序清单9-5 显示了一个正在运行的优先级队列。与TreeSet 中的迭代不同，这里的迭代并不是按照元素的排列顺序访问的。而删除却总是删掉剩余元素中优先级数最小的那个元素。
+
+### 10. 有用但易忽略的点： 
+
+> * Map 有一个`getOrDefault`方法，用于当Map中不存在某个键时，返回一个默认值。`getOrDefault(Object key, V defaultValue)(@since 1.8)`
+> * `Map.putIfAbsent(K key, V value)(@since 1.8)`只有当Map中key存在且value不为null时，才会put
+> * `Map.merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction)（@since 1.8）`如果key 与一个非null 值v 关联， 将函数应用到v 和value, 将key 与结果关联， 或者如果结果为null , 则删除这个键。否则， 将key 与value 关联， 返回get(key)。
+> * Map接口中还有很多有用的Default方法。。。（compute，computeIfPresent，computeIfAbsent，replaceAll 等）
+
+### 11. LinkedHashMap的 访问顺序（Access Order）和 插入顺序（Insertion Order）
+
+LinkedHashMap有一个这样的构造方法：`public LinkedHashMap(int initialCapacity, float loadFactor, boolean accessOrder)`
+
+> initialCapacity   初始容量大小，使用无参构造方法时，此值默认是16
+> loadFactor       加载因子，使用无参构造方法时，此值默认是 0.75f
+> **accessOrder   false： 基于插入顺序;     true：  基于访问顺序** 
+
+如果accessOrder为true的话，则会把访问过的元素放在链表后面，放置顺序是访问的顺序。
+如果accessOrder为flase的话，则按插入顺序来遍历
+
+accessOrder为true时，可用于实现LRU算法。
+
+Ref： [详解LinkedHashMap如何保证元素迭代的顺序](http://www.php.cn/java-article-362041.html) (直接阅读“利用LinkedHashMap实现LRU算法缓存”部分即可)
+
+WeakHashMap， Ref： [浅谈WeakHashMap](http://www.importnew.com/23182.html)
+
+### 12. Enum、EnumMap、EnumSet、IdentityHashMap
+
+Ref: [Enum、EnumMap、EnumSet的用法讲解](https://www.jianshu.com/p/3fed5f481e54)
+
+**IdentityHashMap：**此类利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性。换句话说，在 IdentityHashMap 中，当且仅当 (k1==k2) 时，才认为两个键 k1 和 k2 相等（在正常 Map 实现（如 HashMap）中，当且仅当满足下列条件时才认为两个键 k1 和 k2 相等：(k1==null ? k2==null : e1.equals(e2))）。
+Ref： http://www.cjsdn.net/Doc/JDK50/java/util/IdentityHashMap.html
+
+
