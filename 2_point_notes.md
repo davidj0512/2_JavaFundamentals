@@ -201,4 +201,6 @@ Consumer<String> b = s -> list.add(s);
 Lambda可以没有限制的捕获（也就是在其主体中引用）实例变量和静态变量。但局部变量必须显示声明为final，或事实上是final。
 原因：实例变量存储在堆中，而堆是在线程之间共享的。而局部变量则保存在栈上。如果Lambda可以直接访问局部变量，而且Lambda是在一个线程中使用的，则使用Lambda的线程，可能会在分配该变量的线程将这个变量收回之后，去访问该变量。因此，java在访问自由局部变量时，实际上是在访问它的副本，而不是访问原始变量。
 
+### 15. 实现自己的收集器Collector
 
+[实现自己的收集器例子，ToListCollector](https://github.com/davidj0512/2_JavaFundamentals/blob/master/2a_implement_custom_Collector.md)
