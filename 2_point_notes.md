@@ -186,4 +186,19 @@ Ref: [Enum、EnumMap、EnumSet的用法讲解](https://www.jianshu.com/p/3fed5f4
 **IdentityHashMap：**此类利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性。换句话说，在 IdentityHashMap 中，当且仅当 (k1==k2) 时，才认为两个键 k1 和 k2 相等（在正常 Map 实现（如 HashMap）中，当且仅当满足下列条件时才认为两个键 k1 和 k2 相等：(k1==null ? k2==null : e1.equals(e2))）。
 Ref： http://www.cjsdn.net/Doc/JDK50/java/util/IdentityHashMap.html
 
+### 13. Lambda表达式特殊的void兼容规则：
+
+如果一个Lambda的**主体是一个语句表达式，它就和一个返回void的函数描述符兼容**（当然需要参数列表也兼容）。例如，以下两个都是合法的，尽管List的add方法返回了一个boolean，而不是Consumer上下文（T -> void）所要求的void：
+```java
+//Predicate返回了一个boolean
+Predicate<String> p = s -> list.add(s);
+//Consumer返回了一个void
+Consumer<String> b = s -> list.add(s);
+```
+
+### 14. Lambda使用局部变量：
+
+Lambda可以没有限制的捕获（也就是在其主体中引用）实例变量和静态变量。但局部变量必须显示声明为final，或事实上是final。
+原因：实例变量存储在堆中，而堆是在线程之间共享的。而局部变量则保存在栈上。如果Lambda可以直接访问局部变量，而且Lambda是在一个线程中使用的，则使用Lambda的线程，可能会在分配该变量的线程将这个变量收回之后，去访问该变量。因此，java在访问自由局部变量时，实际上是在访问它的副本，而不是访问原始变量。
+
 
