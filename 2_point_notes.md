@@ -204,3 +204,11 @@ Lambda可以没有限制的捕获（也就是在其主体中引用）实例变�
 ### 15. 实现自己的收集器Collector
 
 [实现自己的收集器例子，ToListCollector](https://github.com/davidj0512/2_JavaFundamentals/blob/master/2a_implement_custom_Collector.md)
+
+### 16. HashMap实现原理与Hash冲突
+
+Ref: [HashMap实现原理与Hash冲突](http://www.uucode.net/201503/hashmap-hash-col)  
+
+### 17. openJdk和sun jdk的区别
+
+Ref:[openJdk和sun jdk的区别](https://www.cnblogs.com/ainimei/p/6450974.html) 
